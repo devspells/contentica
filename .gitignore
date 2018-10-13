@@ -1,0 +1,8 @@
+# npm
+code/node_modules/
+
+# project
+code/build/
+
+# vim
+*.swp

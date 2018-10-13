@@ -1,0 +1,15 @@
+{
+  "inputProcessor": {
+    "name": "default:google-sheets",
+    "config": {
+      "filename": "/tmp/contentica-input.xlsx"
+    }
+  },
+  "outputProcessor": {
+    "name": "default:nunjucks",
+    "config": {
+      "templatesDir": "templates",
+      "outputDir": "html"
+    }
+  }
+}

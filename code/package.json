@@ -1,0 +1,31 @@
+{
+  "name": "contentica",
+  "version": "1.0.0",
+  "description": "content management system for modern web sites",
+  "main": "index.js",
+  "author": "idbolshakov@gmail.com",
+  "license": "ISC",
+  "scripts": {
+    "reinstall": "./scripts/npm/reinstall.sh",
+    "build": "./scripts/npm/build.sh",
+    "lint": "./scripts/npm/lint.sh",
+    "pretify": "./scripts/npm/pretify.sh"
+  },
+  "bin": {
+    "contentica": "./bin/contentica"
+  },
+  "dependencies": {
+    "commander": "^2.19.0",
+    "extend": "^3.0.2",
+    "nunjucks": "^3.1.6",
+    "rimraf": "^2.6.3",
+    "xlsx": "^0.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^10.12.18",
+    "mocha": "^5.2.0",
+    "prettier": "^1.14.3",
+    "tslint": "^5.12.0",
+    "typescript": "^3.1.3"
+  }
+}
