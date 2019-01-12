@@ -7,7 +7,9 @@ import {
 
 class GoogleSheetsInputProcessor implements IGoogleSheetsInputProcessor {
   private dependencies: IGoogleSheetsInputProcessorDependencies;
+  private dataTree: any;
   private config: any;
+  private cliParams: any;
   private file: any;
   private onCompleteCallback: any;
 
@@ -16,7 +18,9 @@ class GoogleSheetsInputProcessor implements IGoogleSheetsInputProcessor {
   }
 
   public init(facade: IInputProcessorInitMethodFacade) {
+    this.dataTree = facade.dataTree;
     this.config = facade.config;
+    this.cliParams = facade.cliParams;
 
     this.dependencies.parser.init({
       dataTree: facade.dataTree,
@@ -33,7 +37,16 @@ class GoogleSheetsInputProcessor implements IGoogleSheetsInputProcessor {
   }
 
   public run() {
-    this.fetchWorkbook().parseWorkbook();
+    if (!this.cliParams.mockInput) {
+      this.fetchWorkbook().parseWorkbook();
+    } else {
+      Object.assign(
+        this.dataTree,
+        JSON.parse(this.dependencies.fs.readFileSync(process.cwd() + '/' + this.config.mockData))
+      );
+
+      this.onCompleteCallback();
+    }
 
     return this;
   }

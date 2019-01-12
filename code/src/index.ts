@@ -17,6 +17,13 @@ if (cli.getParams().init) {
   const serializedConfig = JSON.stringify(newConfig, null, 2);
 
   fs.writeFileSync(`${process.cwd()}/contenticarc.json`, serializedConfig);
+
+  const mockData = { pages: {} };
+  const serializedMockData = JSON.stringify(mockData, null, 2);
+
+  fs.existsSync(`${process.cwd()}/mocks`) || fs.mkdirSync(`${process.cwd()}/mocks`);
+  fs.writeFileSync(`${process.cwd()}/mocks/contentica.json`, serializedMockData);
+
   process.exit(0);
 }
 
@@ -46,6 +53,6 @@ const outputProcessor = require('./processors/output/nunjucks').default;
 outputProcessor.init({ config: config.outputProcessor.config, dataTree });
 
 inputProcessor
-  .init({ config: config.inputProcessor.config, dataTree })
+  .init({ config: config.inputProcessor.config, cliParams: cli.getParams(), dataTree })
   .onComplete(outputProcessor.run)
   .run();

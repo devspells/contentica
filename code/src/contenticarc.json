@@ -2,7 +2,8 @@
   "inputProcessor": {
     "name": "default:google-sheets",
     "config": {
-      "filename": "/tmp/contentica-input.xlsx"
+      "filename": "/tmp/contentica-input.xlsx",
+      "mockData": "mocks/contentica.json"
     }
   },
   "outputProcessor": {
