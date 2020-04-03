@@ -10,7 +10,8 @@
     "name": "default:nunjucks",
     "config": {
       "templatesDir": "templates",
-      "outputDir": "html"
+      "outputDir": "html",
+      "functionsFilePath": null
     }
   }
 }

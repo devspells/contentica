@@ -26,6 +26,12 @@ class NunjucksOutputProcessor implements INunjucksOutputProcessor {
   }
 
   public run() {
+    // load functions if need
+    let functions = null;
+    if (this.config.functionsFilePath) {
+      functions = require(`${process.cwd()}/${this.config.functionsFilePath}`);
+    }
+
     // clear output dir
     const outputDir = `${process.cwd()}/${this.config.outputDir}`;
     this.dependencies.rimraf.sync(outputDir);
@@ -34,7 +40,7 @@ class NunjucksOutputProcessor implements INunjucksOutputProcessor {
     // create static html
     Object.keys(this.dataTree.pages || {}).forEach(page => {
       const templateName = page.slice(0, -5) + '.njk';
-      const data = {...this.dataTree.common, ...this.dataTree.pages[page]};
+      const data = {...this.dataTree.common, ...this.dataTree.pages[page], functions};
       const html = this.dependencies.nunjucks.render(templateName, data);
 
       this.dependencies.fs.writeFileSync(`${outputDir}/${page}`, html);
@@ -46,7 +52,7 @@ class NunjucksOutputProcessor implements INunjucksOutputProcessor {
       const commonData = this.dataTree.common;
 
       this.dataTree.common[page.data].forEach(pageData => {
-        const data = {common: commonData, page: pageData};
+        const data = {common: commonData, page: pageData, functions};
         const html = this.dependencies.nunjucks.render(templateName, data);
 
         this.dependencies.fs.writeFileSync(

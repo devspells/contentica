@@ -3,6 +3,9 @@ import { ITableBlockParserFacade, ITableBlockParserResult } from './interfaces';
 import getCellName from './../get-cell-name';
 
 const columnNameToNumber = (name: string): number => {
+  // if its already number
+  if (parseInt(name)) return +name; 
+
   const digits = name.toUpperCase().split('');
   let columnNumber = 0;
 
