@@ -98,7 +98,7 @@ class GoogleSheetsParser implements IGoogleSheetsParser {
       data[key].forEach(row => {
         Object.keys(row).forEach(rowKey => {
           if (rowKey.slice(-5) !== ':link') return;
-          row[rowKey.slice(0,-5)] = row[row[rowKey]] || {};
+          row[rowKey.slice(0,-5)] = data[row[rowKey]] || {};
         });
       });
     });
