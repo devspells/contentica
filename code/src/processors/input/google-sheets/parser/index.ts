@@ -4,7 +4,13 @@ import {
   IGoogleSheetsParserInitMethodFacade
 } from './interfaces';
 
-import { ACTIVE_PAGE, HTML_PAGE_EXSTENSION, SYSTEM_SHEET_NAME, COMMON_SHEET_NAME } from './utils/constants';
+import {
+  ACTIVE_PAGE,
+  HTML_PAGE_EXSTENSION,
+  SYSTEM_SHEET_NAME,
+  COMMON_SHEET_NAME,
+  DYNAMIC_PAGES_SHEET_NAME,
+} from './utils/constants';
 
 import isSheetEnd from './utils/is-sheet-end';
 import isKeyValueBlockNext from './utils/key-value-block-parser/is-key-value-block-next';
@@ -13,6 +19,7 @@ import isTableBlockNext from './utils/table-block-parser/is-table-block-next';
 import parseKeyValueBlock from './utils/key-value-block-parser';
 import parseSystemInfoBlock from './utils/system-info-block-parser';
 import parseTableBlock from './utils/table-block-parser';
+import parseDynamicPagesSheet from './utils/dynamic-pages-sheet-parser';
 
 class GoogleSheetsParser implements IGoogleSheetsParser {
   private dependencies: any;
@@ -45,6 +52,9 @@ class GoogleSheetsParser implements IGoogleSheetsParser {
 
       // parse common data sheet
       if (name === COMMON_SHEET_NAME) return this.parseCommonSheet(worksheet);
+
+      // parse dynamic pages data sheet
+      if (name === DYNAMIC_PAGES_SHEET_NAME) return this.parseDynamicPagesSheet(worksheet);
     });
   }
 
@@ -102,6 +112,10 @@ class GoogleSheetsParser implements IGoogleSheetsParser {
         });
       });
     });
+  }
+
+  private parseDynamicPagesSheet(worksheet: any): void {
+    parseDynamicPagesSheet({ worksheet, dataTree: this.dataTree });
   }
 }
 

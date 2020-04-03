@@ -31,13 +31,29 @@ class NunjucksOutputProcessor implements INunjucksOutputProcessor {
     this.dependencies.rimraf.sync(outputDir);
     this.dependencies.fs.mkdirSync(outputDir);
 
-    // create html
+    // create static html
     Object.keys(this.dataTree.pages || {}).forEach(page => {
       const templateName = page.slice(0, -5) + '.njk';
       const data = {...this.dataTree.common, ...this.dataTree.pages[page]};
       const html = this.dependencies.nunjucks.render(templateName, data);
 
       this.dependencies.fs.writeFileSync(`${outputDir}/${page}`, html);
+    });
+
+    // create dynamic html
+    (this.dataTree.dynamicPages || []).forEach(page => {
+      const templateName = page.layout;
+      const commonData = this.dataTree.common;
+
+      this.dataTree.common[page.data].forEach(pageData => {
+        const data = {common: commonData, page: pageData};
+        const html = this.dependencies.nunjucks.render(templateName, data);
+
+        this.dependencies.fs.writeFileSync(
+          `${outputDir}/${pageData[page.output_name_key].replace(/ /g, '-')}.html`,
+          html
+        );
+      });
     });
 
     return this;
