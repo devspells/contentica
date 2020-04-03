@@ -70,6 +70,8 @@ class GoogleSheetsParser implements IGoogleSheetsParser {
       Object.assign(this.dataTree.pages[worksheetName], result.parsedData);
       row = result.currentRow;
     }
+
+    this.resolveLinks(this.dataTree.pages[worksheetName]);
   }
 
   private parseCommonSheet(worksheet: any): void {
@@ -85,6 +87,16 @@ class GoogleSheetsParser implements IGoogleSheetsParser {
       Object.assign(this.dataTree.common, result.parsedData);
       row = result.currentRow;
     }
+
+    this.resolveLinks(this.dataTree.common);
+  }
+
+  private resolveLinks(data) {
+    Object.keys(data).forEach(key => {
+      if (key.slice(-5) !== ':link') return;
+
+      data[key.slice(0,-5)] = data[data[key]] || {};
+    });
   }
 }
 
