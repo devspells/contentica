@@ -4,7 +4,7 @@ import {
   IGoogleSheetsParserInitMethodFacade
 } from './interfaces';
 
-import { ACTIVE_PAGE, HTML_PAGE_EXSTENSION, SYSTEM_SHEET_NAME } from './utils/constants';
+import { ACTIVE_PAGE, HTML_PAGE_EXSTENSION, SYSTEM_SHEET_NAME, COMMON_SHEET_NAME } from './utils/constants';
 
 import isSheetEnd from './utils/is-sheet-end';
 import isKeyValueBlockNext from './utils/key-value-block-parser/is-key-value-block-next';
@@ -44,7 +44,7 @@ class GoogleSheetsParser implements IGoogleSheetsParser {
       if (name.slice(-5) === HTML_PAGE_EXSTENSION) return this.parsePageSheet(name, worksheet);
 
       // parse common data sheet
-      // TODO
+      if (name === COMMON_SHEET_NAME) return this.parseCommonSheet(worksheet);
     });
   }
 
@@ -68,6 +68,21 @@ class GoogleSheetsParser implements IGoogleSheetsParser {
       if (isTableBlockNext(row, worksheet)) result = parseTableBlock({ currentRow: row, worksheet });
 
       Object.assign(this.dataTree.pages[worksheetName], result.parsedData);
+      row = result.currentRow;
+    }
+  }
+
+  private parseCommonSheet(worksheet: any): void {
+    this.dataTree.common = this.dataTree.common || {};
+
+    for (let row = 2; !isSheetEnd(row, worksheet); ) {
+      let result = null;
+
+      if (isKeyValueBlockNext(row, worksheet)) result = parseKeyValueBlock({ currentRow: row, worksheet });
+
+      if (isTableBlockNext(row, worksheet)) result = parseTableBlock({ currentRow: row, worksheet });
+
+      Object.assign(this.dataTree.common, result.parsedData);
       row = result.currentRow;
     }
   }

@@ -63,6 +63,14 @@ class GoogleSheetsInputProcessor implements IGoogleSheetsInputProcessor {
   private parseWorkbook(): this {
     this.file.on('finish', () => {
       this.dependencies.parser.parse();
+
+      if (this.cliParams.updateMock) {
+        this.dependencies.fs.writeFileSync(
+          process.cwd() + '/' + this.config.mockData,
+          JSON.stringify(this.dataTree, null, 2)
+        )
+      }
+
       this.onCompleteCallback();
     });
 

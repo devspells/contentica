@@ -34,7 +34,8 @@ class NunjucksOutputProcessor implements INunjucksOutputProcessor {
     // create html
     Object.keys(this.dataTree.pages || {}).forEach(page => {
       const templateName = page.slice(0, -5) + '.njk';
-      const html = this.dependencies.nunjucks.render(templateName, this.dataTree.pages[page]);
+      const data = {...this.dataTree.common, ...this.dataTree.pages[page]};
+      const html = this.dependencies.nunjucks.render(templateName, data);
 
       this.dependencies.fs.writeFileSync(`${outputDir}/${page}`, html);
     });
