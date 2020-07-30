@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import * as https from 'https';
+import { https } from 'follow-redirects';
 import * as xlsx from 'xlsx';
 
 import GoogleSheetsParser from './parser';
